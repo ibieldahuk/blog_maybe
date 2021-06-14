@@ -1,0 +1,39 @@
+<!--This is a shitty template for shitty people like me.-->
+<!--It's just the base for any HTML file.-->
+<!--The title of the file is kind of self descriptive. But because I'm as dumbass a Eric Foreman,
+I need these comments.-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--If I want to overwrite the title, I can do it, and set whatever I want.-->
+    {% if title %}
+    <title>{{ title }}</title>
+    {% else %}
+    <!--Otherwise, the title will be just the name of the project.-->
+    <title>Blog, Maybe</title>
+    {% endif %}
+</head>
+<body>
+    <!--This div will be some sort of navbar with some basic links.-->
+    <div>
+        Blog - Maybe:
+        <a href="{{ url_for('index') }}">Inicio</a>
+        <a href="{{ url_for('post') }}">Publicar</a>
+    </div>
+    <!--This function catches the messages sent through the flash function.-->
+    {% with messages = get_flashed_messages() %}
+    <!--And the following lines print it on screen.-->
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    <!--Finally, the contents of the page will be defined in another template.-->
+    {% block content %}{% endblock %}
+</body>
+</html>

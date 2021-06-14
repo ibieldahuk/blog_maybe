@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Make a post!</h1>
+
+<form action="" method="POST">
+
+    <p>
+        {{ form.title.label }}<br>
+        {{ form.title(size=32) }}
+    </p>
+    <p>
+        {{ form.body.label }}<br>
+        {{ form.body(size=40) }}
+    </p>
+    <p>
+        {{ form.submit }}
+    </p>
+
+</form>
+
+{% endblock %}

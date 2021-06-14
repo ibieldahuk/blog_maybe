@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+<!--Just like a PHP class, I bring the contents of the template base.html with this keyword.-->
+
+<!--The block content of base.html will be whatever is inside of this block content.-->
+<!--Thanks, Jinja, very helpful.-->
+{% block content %}
+
+<!--The same way we use an if in base.html, we can use for loops.-->
+<!--This loop runs through all the indexes in the list posts, defined in the view function for this template
+in routes.py.-->
+{% for post in posts %}
+<h3>{{ post.title }}</h3>
+<p>{{ post.body }}</p>
+<a href="/edit?p={{ post.id }}">editar</a>
+{% endfor %}
+
+{% endblock %}
