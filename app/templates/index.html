@@ -11,6 +11,16 @@ in routes.py.-->
 {% for post in posts %}
 <h3>{{ post.title }}</h3>
 <p>{{ post.body }}</p>
+<!--The reason why I use an if for the timestamp is because there are a few posts made before
+timestamps where a thing.-->
+{% if post.timestamp %}
+<!--The strftime() is a method for datetime type objects. The parameter '%x' ensures the method
+returns a string with a mm/dd/yyyy format, while the '%X' parameter ensures it returns a
+string with a hh:mm:ss format.-->
+<p>Publicado el {{ post.timestamp.strftime('%x') }} a las {{ post.timestamp.strftime('%X') }}</p>
+{% endif %}
+<!--This route specifies the id of the post as a parameter, this way the view function can query de
+specific post the user wishes to edit.-->
 <a href="/edit?p={{ post.id }}">editar</a>
 {% endfor %}
 
