@@ -50,11 +50,13 @@ def post():
     # The request object is a global instance of the Request class, it access the incoming request data.
     # The form property returns the form parameters.
     # Why we return the form parameters to the Form class? No idea, just... no fing clue.
-    form = CreatePostForm(request.form)
+    form = CreatePostForm()
     # We check whether the request method is POST, that is, if the user clicked the submit button.
     # If the method is GET it returns false, this happens when the page is loaded for the first time.
     # If the method is POST it will return true, this happens when the user clicks the submit button.
-    if request.method == 'POST' and form.validate():
+    # The validate on submit function checks whether the method is POST and the validators if the form
+    # and returns True or False.
+    if form.validate_on_submit():
         # If the method is POST, we will process the form data.
         post = Post(title=form.title.data, body=form.body.data)
         db.session.add(post)
@@ -82,11 +84,11 @@ def edit():
     post = Post.query.get(id)
     # Same as the create post function, we create an instance of the form class.
     # Again, I have no idea what the parameters do, I just do as the WTForms docs say.
-    form = EditPostForm(request.form, obj=post)
+    form = EditPostForm(obj=post)
 
     # In case the user clicked the submit button, the method shall be POST.
     # The user must also have passed all the tests presented by the validators.
-    if request.method == 'POST' and form.validate():
+    if form.validate_on_submit():
         # We replace the data in the db with what the user wrote.
         post.title = form.title.data
         post.body = form.body.data
