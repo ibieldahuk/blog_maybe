@@ -17,20 +17,26 @@ def index():
     # I make some fake posts with the structure I'd like my posts to have.
     # Whenever I get to databases and shit. Fuck, why do I like this.
     # I couldn't just be a gardener?!
-    posts = [
-        {'title': 'A Post',
-         'body': 'Mi primer post!',
-         'date': '28/5/2021',
-         'time': '00:13'},
-        {'title': 'Another Post',
-         'body': 'Este post viene después del primero.',
-         'date': '29/5/2021',
-         'time': '10:33'}
-    ]
+    # (This is now ancient technology.)
+    #posts = [
+    #    {'title': 'A Post',
+    #     'body': 'Mi primer post!',
+    #     'date': '28/5/2021',
+    #     'time': '00:13'},
+    #    {'title': 'Another Post',
+    #     'body': 'Este post viene después del primero.',
+    #     'date': '29/5/2021',
+    #     'time': '10:33'}
+    #]
     # Now that I have a db, I will abandon such list and make my own lists!
     # The next variable stores all posts through a SQLAlchemy query.
     # The all() function returns a list (or array, no idea really) with every row of that model.
-    post = Post.query.all()
+    posts = Post.query.all()
+    # For my next trick, I'll reverse the list:
+    for i in range(len(posts)//2):
+        aux = posts[i]
+        posts[i] = posts[-1-i]
+        posts[-1-i] = aux
     # I think every view function must end rendering something or requesting another URL,
     # which would lead to another view function which hopefully renders some shit.
     # The render_template() function here renders the template in the first parameter.
@@ -40,7 +46,7 @@ def index():
     # "templates".
     # What are the other parameters? those are the variables requested by the template.
     # Go to index.html and you'll see.
-    return render_template('index.html', title='Home Page', posts=post)
+    return render_template('index.html', title='Home Page', posts=posts)
 
 
 @app.route('/post', methods=['GET', 'POST'])
