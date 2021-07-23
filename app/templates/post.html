@@ -6,6 +6,8 @@
 
 <form action="" method="POST" novalidate>
 
+    <!--In order to protect this form from CSRF attacks, if the form is a FlaskForm, 
+    all we have to do is set the following line and everything will be taken care for us.-->
     {{ form.csrf_token }}
 
     <p>
