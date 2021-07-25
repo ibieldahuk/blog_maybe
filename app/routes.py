@@ -1,7 +1,9 @@
 from app import app, db
 from flask import render_template, flash, redirect, url_for, request
-from app.forms import CreatePostForm, EditPostForm
-from app.models import Post
+from app.forms import CreatePostForm, EditPostForm, UserLoginForm, UserRegistrationForm
+from app.models import Post, User
+from flask_login import current_user, login_user, logout_user, login_required
+from werkzeug.urls import url_parse
 
 
 # Decorators are wannabe emails! Look at them, with their @'s...
@@ -50,6 +52,9 @@ def index():
 
 
 @app.route('/post', methods=['GET', 'POST'])
+# This decorator required that current_user.is_authenticated = True. Otherwise
+# it will redirect the client to de login view (set in __init__.py.)
+@login_required
 def post():
     # The view function for a form is pretty simple, except it isn't.
     # First, we create a variable and assign to it the class we created in the forms module.
@@ -111,3 +116,76 @@ def edit():
     # the user did not fulfill the validators requirements:
     # The template will be rendered.
     return render_template('edit.html', form=form)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+
+    # If a logged in user is trying to access the login form, redirect them to the index.
+    # The is_authenticated() function is one of the properties added by the UserMixin class
+    # to the User model in app.models.py.
+    # The current user is a quick and usefull function to get the user object of the client.
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+
+    form = UserLoginForm()
+
+    # Validating the form on submit.
+    if form.validate_on_submit():
+
+        # We query a user instance through the username given in the form.
+        user = User.query.filter_by(username=form.username.data).first()
+
+        # This if checks whether the username or password are incorrect.
+        if user is None or not user.check_password(form.password.data):
+            flash('Nombre de usuario o contraseña incorrectos.')
+            return redirect(url_for('login'))
+        
+        # If the user and password are correct, the user is loggend in through
+        # the login_user() function, wich takes as parameters the user object and
+        # I imagin the remember parameter must take a boolean value.
+        login_user(user, remember=form.remember_me.data)
+
+        # When a user is redirected to the login view through the @login_required decorator,
+        # the URL request won't simply be /login, it'll be /login?next=/page_url.
+        # This argument "next" must be retrieved so that we know where to redirect the client next.
+        next_page = request.args.get('next')
+
+        # In case there is no value for next page, the client will be redirected to the index.
+        # If there is a value for next and this value is not a relative URL (e.g.: /index) but an
+        # absolute one (e.g.: http://www.malicious.site), then the app will ignore said URL and
+        # still redirect the client to the index.
+        if not next_page or url_parse(next_page).netloc != '':
+            next_page = url_for('index')
+
+        return redirect(next_page)
+
+    return render_template('login.html', title='Ingresar', form=form)
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    
+    form = UserRegistrationForm()
+
+    if form.validate_on_submit():
+
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
+
+        db.session.add(user)
+        db.session.commit()
+
+        flash('¡Se creó la cuenta exitosamente!')
+        return redirect(url_for('login'))
+
+    return render_template('register.html', title='Creación de cuenta', form=form)

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Crear una nueva cuenta</h1>
+
+<form action="" method="POST" novalidate>
+
+    {{ form.csrf_token }}
+
+    <p>
+        {{ form.username.label }}<br>
+        {{ form.username(size=32) }}
+        <ul>
+            {% for error in form.username.errors %}
+            <li style="color: red;">[{{ error }}]</li>
+            {% endfor %}
+        </ul>
+    </p>
+
+    <p>
+        {{ form.email.label }}<br>
+        {{ form.email(size=32) }}
+        <ul>
+            {% for error in form.email.errors %}
+            <li style="color: red;">[{{ error }}]</li>
+            {% endfor %}
+        </ul>
+    </p>
+
+    <p>
+        {{ form.password.label }}<br>
+        {{ form.password(size=32) }}
+        <ul>
+            {% for error in form.password.errors %}
+            <li style="color: red;">[{{ error }}]</li>
+            {% endfor %}
+        </ul>
+    </p>
+
+    <p>
+        {{ form.password2.label }}<br>
+        {{ form.password2(size=32) }}
+        <ul>
+            {% for error in form.password2.errors %}
+            <li style="color: red;">[{{ error }}]</li>
+            {% endfor %}
+        </ul>
+    </p>
+
+    <p>{{ form.submit() }}</p>
+
+</form>
+
+{% endblock %}

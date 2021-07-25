@@ -20,6 +20,11 @@ I need these comments.-->
     <div>
         Blog - Maybe:
         <a href="{{ url_for('index') }}">Inicio</a>
+        {% if current_user.is_anonymous %}
+        <a href="{{ url_for('login') }}">Ingresar</a>
+        {% else %}
+        <a href="{{ url_for('logout') }}">Salir de la cuenta</a>
+        {% endif %}
         <a href="{{ url_for('post') }}">Publicar</a>
     </div>
     <!--This function catches the messages sent through the flash function.-->
