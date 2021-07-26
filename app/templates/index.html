@@ -9,6 +9,7 @@
 <!--This loop runs through all the indexes in the list posts, defined in the view function for this template
 in routes.py.-->
 {% for post in posts %}
+<p>Escrito por: {{ post.author.username }}</p>
 <h3>{{ post.title }}</h3>
 <p>{{ post.body }}</p>
 <!--The reason why I use an if for the timestamp is because there are a few posts made before
@@ -21,7 +22,10 @@ string with a hh:mm:ss format.-->
 {% endif %}
 <!--This route specifies the id of the post as a parameter, this way the view function can query de
 specific post the user wishes to edit.-->
+{% if current_user.id == post.author.id %}
 <a href="/edit?p={{ post.id }}">editar</a>
+{% endif %}
+<hr>
 {% endfor %}
 
 {% endblock %}
