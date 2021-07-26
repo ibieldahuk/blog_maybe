@@ -69,7 +69,7 @@ def post():
     # and returns True or False.
     if form.validate_on_submit():
         # If the method is POST, we will process the form data.
-        post = Post(title=form.title.data, body=form.body.data)
+        post = Post(title=form.title.data, body=form.body.data, author=current_user)
         db.session.add(post)
         db.session.commit()
         
@@ -93,6 +93,13 @@ def edit():
     # The get method takes an integer and returns an object from the db which primary key corresponds
     # with said integer.
     post = Post.query.get(id)
+
+    # Just in case the client user and the user that created the post are different, I redirect
+    # them to the index page. I'm not InfoSec so I don't know if this is possible, but I feel
+    # that is awfully easy to type "/edit?p=" and a random number.
+    if post.author.id != current_user.id:
+        return redirect(url_for('index'))
+
     # Same as the create post function, we create an instance of the form class.
     # Again, I have no idea what the parameters do, I just do as the WTForms docs say.
     form = EditPostForm(obj=post)
