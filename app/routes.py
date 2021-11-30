@@ -17,8 +17,6 @@ from werkzeug.urls import url_parse
 # After the above mentioned requests, this function will be invoked/called, whetever.
 def index():
     # I make some fake posts with the structure I'd like my posts to have.
-    # Whenever I get to databases and shit. Fuck, why do I like this.
-    # I couldn't just be a gardener?!
     # (This is now ancient technology.)
     #posts = [
     #    {'title': 'A Post',
@@ -40,9 +38,9 @@ def index():
         posts[i] = posts[-1-i]
         posts[-1-i] = aux
     # I think every view function must end rendering something or requesting another URL,
-    # which would lead to another view function which hopefully renders some shit.
+    # which would lead to another view function which hopefully renders something.
     # The render_template() function here renders the template in the first parameter.
-    # You may ask: How tf does the function know where the template is?? You just said the name
+    # You may ask: How does the function know where the template is?? You just said the name
     # of the file, you absolute dingus!
     # Well, the function automatically looks for a directory in the app directory named "template" or
     # "templates".
@@ -60,7 +58,7 @@ def post():
     # First, we create a variable and assign to it the class we created in the forms module.
     # The request object is a global instance of the Request class, it access the incoming request data.
     # The form property returns the form parameters.
-    # Why we return the form parameters to the Form class? No idea, just... no fing clue.
+    # Why we return the form parameters to the Form class? No idea, just... no clue, rly.
     form = CreatePostForm()
     # We check whether the request method is POST, that is, if the user clicked the submit button.
     # If the method is GET it returns false, this happens when the page is loaded for the first time.
@@ -119,7 +117,7 @@ def edit():
         form.title.data = post.title
         form.body.data = post.body
 
-    # If the user is requesting this page for the first time or \
+    # If the user is requesting this page for the first time or
     # the user did not fulfill the validators requirements:
     # The template will be rendered.
     return render_template('edit.html', form=form)

@@ -11,7 +11,7 @@ class User(UserMixin, db.Model):
     # When setting the index and unique parameters to True simultaneously, the columns will be
     # generated with index values, duplicate values are not allowed.
     # Generating indexes makes searches and queries quicker, but updating tables slower, this is
-    # because the inexes must be updated too. For this, it is adviceable to only use indexes
+    # because the indexes must be updated too. For this, it is adviceable to only use indexes
     # in columns that will get queried a lot.
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
